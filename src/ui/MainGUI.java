@@ -204,13 +204,14 @@ public class MainGUI extends javax.swing.JFrame {
             try {
                 if(cbSourceIsFolder.isSelected()) {
                     FileUtils.copyDirectory(new File(source), new File(destination));
+                    Logger.log("finished copying: " + destination);
                 } else {
                     FileUtils.copyFile(new File(source), new File(destination));
+                    Logger.log("finished copying: " + destination);
                 }
             } catch (IOException ex) {
                 Logger.log(ex.getMessage());
             }
-            Logger.log(destination);
         }
     }//GEN-LAST:event_btnCopyActionPerformed
 
