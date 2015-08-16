@@ -13,6 +13,7 @@ public class MainGUI extends javax.swing.JFrame {
     public MainGUI() {
         initComponents();
         lstNetbiosNames.setTransferHandler(new TxtTransferHandler(lstNetbiosNames));
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -50,7 +51,8 @@ public class MainGUI extends javax.swing.JFrame {
         lstNetbiosNames.setDragEnabled(true);
         paneNetbiosNames.setViewportView(lstNetbiosNames);
 
-        lblSource.setText("Source (UNC)");
+        lblSource.setText("Source");
+        lblSource.setToolTipText("");
 
         lblDestination.setText("Destination (UNC)");
 
@@ -63,6 +65,11 @@ public class MainGUI extends javax.swing.JFrame {
         jScrollPane2.setViewportView(txtLog);
 
         btnCopy.setText("Copy");
+        btnCopy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCopyActionPerformed(evt);
+            }
+        });
 
         btnChooseSource.setText("Browse");
         btnChooseSource.addActionListener(new java.awt.event.ActionListener() {
@@ -159,6 +166,7 @@ public class MainGUI extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnChooseSourceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseSourceActionPerformed
@@ -179,9 +187,19 @@ public class MainGUI extends javax.swing.JFrame {
         int choice = chooserDestination.showOpenDialog(this);
         if(choice == JFileChooser.APPROVE_OPTION) {
             File file = chooserDestination.getSelectedFile();
-            txtDestination.setText(file.getAbsolutePath());
+            //drop the C:\ part
+            String unc = "\\\\%COMPUTERNAME%\\" + file.getAbsolutePath().substring(3);
+            txtDestination.setText(unc);
         }
     }//GEN-LAST:event_btnChooseDestinationActionPerformed
+
+    private void btnCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyActionPerformed
+        String path = txtDestination.getText();
+        for(int i = 0; i < lstNetbiosNames.getModel().getSize(); i++) {
+            String dest = path.replace("%COMPUTERNAME%", lstNetbiosNames.getModel().getElementAt(i).toString() + "\\C$");
+            txtLog.append(dest + "\n");
+        }
+    }//GEN-LAST:event_btnCopyActionPerformed
 
     public static void main(String args[]) {
         try {
