@@ -1,5 +1,7 @@
 package jcopy;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import ui.MainGUI;
@@ -10,7 +12,7 @@ public class Logger {
         msg = msg + "\n";
         MainGUI.txtLog.append(msg);
         try {
-            PrintWriter out = new PrintWriter("jcopy.log");
+            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("jcopy.log", true)));
             out.append(msg);
             out.close();
         } catch (IOException ex) {
