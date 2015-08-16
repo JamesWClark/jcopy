@@ -6,13 +6,18 @@
 package ui;
 
 import java.io.File;
+import java.io.IOException;
 import javax.swing.JFileChooser;
+import jcopy.Logger;
+import org.apache.commons.io.FileUtils;
 
 public class MainGUI extends javax.swing.JFrame {
 
     public MainGUI() {
         initComponents();
         lstNetbiosNames.setTransferHandler(new TxtTransferHandler(lstNetbiosNames));
+        this.setLocationRelativeTo(null);
+        //this.setLocationByPlatform(true);
     }
 
     @SuppressWarnings("unchecked")
@@ -165,7 +170,6 @@ public class MainGUI extends javax.swing.JFrame {
         );
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnChooseSourceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseSourceActionPerformed
@@ -194,9 +198,19 @@ public class MainGUI extends javax.swing.JFrame {
 
     private void btnCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyActionPerformed
         String path = txtDestination.getText();
+        String source = txtSource.getText();
         for(int i = 0; i < lstNetbiosNames.getModel().getSize(); i++) {
-            String dest = path.replace("%COMPUTERNAME%", lstNetbiosNames.getModel().getElementAt(i).toString() + "\\C$");
-            txtLog.append(dest + "\n");
+            String destination = path.replace("%COMPUTERNAME%", lstNetbiosNames.getModel().getElementAt(i).toString() + "\\C$");
+            try {
+                if(cbSourceIsFolder.isSelected()) {
+                    FileUtils.copyDirectory(new File(source), new File(destination));
+                } else {
+                    FileUtils.copyFile(new File(source), new File(destination));
+                }
+            } catch (IOException ex) {
+                Logger.log(ex.getMessage());
+            }
+            Logger.log(destination);
         }
     }//GEN-LAST:event_btnCopyActionPerformed
 
@@ -219,7 +233,7 @@ public class MainGUI extends javax.swing.JFrame {
     private javax.swing.JList lstNetbiosNames;
     private javax.swing.JScrollPane paneNetbiosNames;
     private javax.swing.JTextField txtDestination;
-    private javax.swing.JTextArea txtLog;
+    public static javax.swing.JTextArea txtLog;
     private javax.swing.JTextField txtShortcutLink;
     private javax.swing.JTextField txtSource;
     // End of variables declaration//GEN-END:variables
