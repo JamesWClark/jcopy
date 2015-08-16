@@ -64,8 +64,10 @@ public class MainGUI extends javax.swing.JFrame {
 
         lblLog.setText("Log");
 
+        txtLog.setEditable(false);
         txtLog.setColumns(20);
         txtLog.setRows(5);
+        txtLog.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane2.setViewportView(txtLog);
 
         btnCopy.setText("Copy");
@@ -197,15 +199,17 @@ public class MainGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnChooseDestinationActionPerformed
 
     private void btnCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyActionPerformed
-        String path = txtDestination.getText();
+        String destination = txtDestination.getText();
         String source = txtSource.getText();
         for(int i = 0; i < lstNetbiosNames.getModel().getSize(); i++) {
-            String destination = path.replace("%COMPUTERNAME%", lstNetbiosNames.getModel().getElementAt(i).toString() + "\\C$");
+            destination = destination.replace("%COMPUTERNAME%", lstNetbiosNames.getModel().getElementAt(i).toString() + "\\C$");
             try {
                 if(cbSourceIsFolder.isSelected()) {
                     FileUtils.copyDirectory(new File(source), new File(destination));
                     Logger.log("finished copying: " + destination);
                 } else {
+                    String fileName = new File(source).getName();
+                    destination = destination + "/" + fileName;
                     FileUtils.copyFile(new File(source), new File(destination));
                     Logger.log("finished copying: " + destination);
                 }
