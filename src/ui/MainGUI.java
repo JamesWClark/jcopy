@@ -199,9 +199,9 @@ public class MainGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnChooseDestinationActionPerformed
 
     private void btnCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyActionPerformed
-        String destination = txtDestination.getText();
-        String source = txtSource.getText();
         for(int i = 0; i < lstNetbiosNames.getModel().getSize(); i++) {
+            String destination = txtDestination.getText();
+            String source = txtSource.getText();
             destination = destination.replace("%COMPUTERNAME%", lstNetbiosNames.getModel().getElementAt(i).toString() + "\\C$");
             try {
                 if(cbSourceIsFolder.isSelected()) {
