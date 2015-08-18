@@ -42,7 +42,6 @@ public class Main {
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
                     new MainGUI().setVisible(true);
-                    Logger.log("\n====\nStart a new sessions");
                 }
             });
         //COMMAND LINE
